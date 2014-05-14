@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+
+    config.vm.network :forwarded_port, guest: 4500, host: 4500
+
+    config.vm.provider "docker" do |d|
+        d.image = "shipyard/agent:latest"
+        d.create_args = ["--link", "shipyard:server", "-e", "URL=$SERVER_PORT"]
+        d.volumes = ["/var/run/docker.sock:/docker.sock"]
+        d.ports = ["4500:4500"]
+        d.vagrant_vagrantfile = "../Vagrantfile"
+    end
+
+end

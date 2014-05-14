@@ -1,0 +1,98 @@
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+DOCKER=(
+$SCRIPT_DIR/registry
+$SCRIPT_DIR/shipyard
+$SCRIPT_DIR/shipyard-agent
+)
+
+clean() {
+    vagrant ssh -c 'docker stop $(docker ps -qa) &> /dev/null'
+    vagrant ssh -c 'docker rm $(docker ps -qa) &> /dev/null'
+}
+
+build() {
+    echo "TODO - build"
+}
+
+run() {
+    cd $SCRIPT_DIR/shipyard-agent && vagrant up --provider=docker
+}
+
+ssh() {
+    vagrant ssh
+}
+
+status() {
+    for container in ${DOCKER[*]}; do
+        cd $container && vagrant status
+    done
+}
+
+start() {
+    for container in ${DOCKER[*]}; do
+        if [[ $container != *shipyard-agent ]];then
+            cd $container && vagrant up --provider=docker
+        fi
+    done
+}
+
+restart() {
+    clean
+    for container in ${DOCKER[*]}; do
+        cd $container && vagrant destroy
+    done
+    start
+}
+
+stop() {
+    for container in ${DOCKER[*]}; do
+        cd $container && vagrant halt
+    done
+    cd $SCRIPT_DIR && vagrant halt
+}
+
+destroy() {
+    for container in ${DOCKER[*]}; do
+        cd $container && vagrant destroy
+    done
+    cd $SCRIPT_DIR && vagrant destroy
+}
+
+usage() {
+    echo "Usage: $0 [ clean | build | run | ssh | status | start | restart | stop | destroy ]"
+}
+
+if [[ $# == 0 ]]; then
+    usage
+    exit 1
+fi
+
+while [[ -n "$1" ]]; do
+    case $1 in
+        clean ) clean
+            ;;
+        build ) build
+            ;;
+        run ) run
+            ;;
+        ssh ) ssh
+            ;;
+        status ) status
+            ;;
+        start ) start
+            ;;
+        restart ) restart
+            ;;
+        stop ) stop
+            ;;
+        destroy ) destroy
+            ;;
+        * ) usage
+            exit 1
+            ;;
+    esac
+    shift
+done

@@ -1,0 +1,10 @@
+Vagrant.configure("2") do |config|
+
+    config.vm.provider "docker" do |d|
+        d.image = "shipyard/deploy:latest"
+        d.cmd = ["setup"]
+        d.volumes = ["/var/run/docker.sock:/docker.sock"]
+        d.vagrant_vagrantfile = "../Vagrantfile"
+    end
+
+end
