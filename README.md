@@ -1,3 +1,8 @@
+### Requirements
+* [VirtualBox][10]
+* [Vagrant][11] (1.6+)
+
+### Setup
 Start up a [docker registry][1] and [Shipyard][2] container.
 
     ./environment start
@@ -53,3 +58,5 @@ To delete a tag:
 [7]: http://docs.docker.io/use/workingwithrepository/
 [8]: http://blog.docker.io/2013/07/how-to-use-your-own-registry/
 [9]: http://docs.docker.io/reference/api/registry_api/
+[10]: https://www.virtualbox.org/wiki/Downloads
+[11]: http://www.vagrantup.com/downloads.html
