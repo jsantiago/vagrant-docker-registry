@@ -1,0 +1,6 @@
+# A dictionary of folders to sync.
+# Format is:
+# host_machine_folder => vagrant_machine_folder
+# $synced_folders = {
+#     "~/working" => "/home/vagrant/working"
+# }
