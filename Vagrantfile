@@ -4,9 +4,16 @@ if File.exists?(CONFIG)
     require_relative CONFIG
 end
 
+$script = <<SCRIPT
+apt-get install -y docker.io
+usermod -a -G docker vagrant
+ln -sf /usr/bin/docker.io /usr/bin/docker
+SCRIPT
+
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "jsantiago/trusty64"
+    config.vm.box = "ubuntu/trusty64"
+    config.vm.provision "shell", inline: $script
 
     if $synced_folders
         $synced_folders.each { |host, guest|
